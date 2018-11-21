@@ -10,11 +10,20 @@
 
 # Import the necessary packages
 import os
+import matplotlib
+import matplotlib.pyplot as plt
+import torch
 
 from shutil import copyfile
 
+matplotlib.use('agg')
 
+
+# -------------------------------------------------------------------
+#
 # Helper functions
+#
+# -------------------------------------------------------------------
 
 def split_subfolder(base_path, folder_name, save_path, save_folder_name):
     folder_path = os.path.join(base_path, folder_name)
@@ -63,8 +72,55 @@ def split_train_val(base_path, folder_name, save_path, train_name, val_name):
             copyfile(src_path, dst_path + '/' + name)
 
 
+# --------------------------------------------------------------------
+#
+# Draw Curved Line
+#
+# --------------------------------------------------------------------
+epoch = []
+fig = plt.figure()
+ax0 = fig.add_subplot(121, title='loss')
+ax1 = fig.add_subplot(122, title='top1-err')
+
+
+def draw_curve(current_epoch, y_loss, y_error, model_name):
+    """
+    Draw the curved line of the training phase
+
+    :param current_epoch: The current epoch
+    :param y_loss: y_loss
+    :param y_error: y_error
+    :param name: The name of model
+    :return: None
+    """
+
+    epoch.append(current_epoch)
+    ax0.plot(epoch, y_loss['train'], 'bo-', label='train')
+    ax0.plot(epoch, y_loss['val'], 'ro-', label='val')
+    ax1.plot(epoch, y_error['train'], 'bo-', label='train')
+    ax1.plot(epoch, y_error['val'], 'ro-', label='val')
+
+    if current_epoch == 0:
+        ax0.legend()
+        ax1.legend()
+    fig.savefig(os.path.join('./model', model_name, 'curved_line.jpg'))
+
+
+# --------------------------------------------------------------------
+#
+# Save model
+#
+# --------------------------------------------------------------------
+def save_model(network, epoch_label, model_path):
+    save_filename = 'net_{}.pth'.format(epoch_label)
+    save_path = os.path.join(model_path, save_filename)
+    torch.save(network.cpu().state_dict(), save_path)
+
+
 # -------------------------------------------------------------------
+#
 # Test split_subfolder
+#
 # -------------------------------------------------------------------
 if __name__ == '__main__':
     download_path = './datasets/Market-1501'
