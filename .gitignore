@@ -48,3 +48,10 @@ Temporary Items
 
 ##
 .idea/
+__pycache__/
+
+## Virtualenv
+venv/
+
+## Datasets
+datasets/
