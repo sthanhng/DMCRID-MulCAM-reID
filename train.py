@@ -53,11 +53,16 @@ parser.add_argument('--PCB', action='store_true', default=False,
                     help='use PCB-based model')
 args = parser.parse_args()
 
-data_dir = args.data_dir
-model_path_full = os.path.join(args.model_path, args.model_name)
-
 
 ######################################################################
+
+model_path_full = os.path.join(args.model_path, args.model_name)
+if not os.path.exists(model_path_full):
+    os.makedirs(model_path_full)
+
+# save arguments
+with open('{}/args.json'.format(model_path_full), 'w') as fp:
+    json.dump(vars(args), fp, indent=4)
 
 
 # -------------------------------------------------------------------
@@ -122,9 +127,9 @@ if args.train_all:
     train_all = '_all'
 
 image_dsets = dict()
-image_dsets['train'] = datasets.ImageFolder(os.path.join(data_dir, 'train' + train_all),
+image_dsets['train'] = datasets.ImageFolder(os.path.join(args.data_dir, 'train' + train_all),
                                             data_transforms['train'])
-image_dsets['val'] = datasets.ImageFolder(os.path.join(data_dir, 'val'),
+image_dsets['val'] = datasets.ImageFolder(os.path.join(args.data_dir, 'val'),
                                           data_transforms['val'])
 
 dset_loaders = {
@@ -349,12 +354,6 @@ if __name__ == '__main__':
     # Train and evaluate
     #
     # --------------------------------------------------------------------
-    if not os.path.exists(model_path_full):
-        os.makedirs(model_path_full)
-
-    # save arguments
-    with open('{}/args.json'.format(model_path_full), 'w') as fp:
-        json.dump(vars(args), fp, indent=4)
 
     model = train_model(model, criterion, optimizer, exp_lr_scheduler,
                         num_epochs=args.num_epochs)
