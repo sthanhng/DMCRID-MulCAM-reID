@@ -21,10 +21,9 @@ import json
 
 from torch.optim import lr_scheduler
 from torch.autograd import Variable
-from torchvision import datasets, models, transforms
+from torchvision import datasets, transforms
 
 from model import ResNet50, PCB
-from shutil import copyfile
 
 from utils import draw_curve, save_model
 
