@@ -34,6 +34,31 @@ $ pip install -r requirements.txt
 ## Usage
 
 ### Part 1. Data preparation
+Create a directory to store re-Id datasets under this repository or you can use the directory `datasets/`.
+
+> **Note**
+- If you wanna store datasets in another directory, you need to specify `--data-dir path_to_your_data` when running the training code.
+- Please follow the instructions below to prepare datasets.
+- If you find any errors/bugs, please feedback in the `Issues` section.
+- In the following, I assume that the path to the dataset directory is `datasets/`.
+
+#### Market-1501:
+1. Download the dataset to `datasets/` from [here](http://www.liangzheng.org/Project/project_reid.html).
+2. Extract the file and rename it to `Market-1501`. The data structure should look like:
+```
+├── Market-1501/
+│   ├── bounding_box_test/          /* Files for testing (candidate images pool)
+│   ├── bounding_box_train/         /* Files for training 
+│   ├── gt_bbox/                    /* We do not use it 
+│   ├── gt_query/                   /* Files for multiple query testing 
+│   ├── query/                      /* Files for testing (query images)
+│   ├── readme.txt
+```
+
+3. Run the following script to transform the dataset, replacing the paths with yours by opening and editing the file `prepare_data.py` and then change the `root_path = './datasets/Market-1501'` to your dataset path.  
+```bash
+$ python prepare_data.py
+```
 
 ### Part 2. Training
 
