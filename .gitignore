@@ -55,3 +55,7 @@ venv/
 
 ## Datasets
 datasets/
+
+## Trained models
+models/
+models/reid-ResNet50
