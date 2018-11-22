@@ -105,7 +105,7 @@ def draw_curve(current_epoch, y_loss, y_error, args):
     if current_epoch == 0:
         ax0.legend()
         ax1.legend()
-    fig.savefig(os.path.join(args.mode_path, args.model_name, 'curved_line.jpg'))
+    fig.savefig(os.path.join(args.model_path, args.model_name, 'curved_line.jpg'))
 
 
 # --------------------------------------------------------------------
