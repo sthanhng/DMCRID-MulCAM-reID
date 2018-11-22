@@ -15,6 +15,7 @@ import matplotlib.pyplot as plt
 import torch
 
 from shutil import copyfile
+from torch.autograd import Variable
 
 matplotlib.use('agg')
 
@@ -170,6 +171,60 @@ def get_id(img_path):
         camera_id.append(int(camera[0]))
 
     return camera_id, labels
+
+
+# --------------------------------------------------------------------
+#
+# Extract feature
+#
+# --------------------------------------------------------------------
+def extract_feature(model, data_loaders, args):
+    """
+    Extract feature from  a trained model
+    :param model:
+    :param data_loaders:
+    :return:
+    """
+
+    features = torch.FloatTensor()
+    count = 0
+    for data in data_loaders:
+        img, label = data
+        n, c, h, w = img.size()
+        count += n
+        print('{}-th image'.format(count))
+        if args.PCB:
+            ff = torch.FloatTensor(n, 2048, 6).zero_()
+        else:
+            ff = torch.FloatTensor(n, 2048).zero_()
+        for i in range(2):
+            if (i == 1):
+                img = fliplr(img)
+            input_img = Variable(img.cuda())
+            outputs = model(input_img)
+            f = outputs.data.cpu()
+            ff = ff + f
+
+        #####################################################################
+        #
+        # normalize features
+        #
+        if args.PCB:
+            # feature size (n, 2048, 6)
+            # 1. To treat every part equally, I calculate the norm for every
+            # 2048-dim part feature.
+            # 2. To keep the cosine score==1, sqrt(6) is added to normalize
+            # the whole feature (2048*6).
+            fnorm = torch.norm(ff, p=2, dim=1, keepdim=True) * np.sqrt(6)
+            ff = ff.div(fnorm.expand_as(ff))
+            ff = ff.view(ff.size(0), -1)
+        else:
+            fnorm = torch.norm(ff, p=2, dim=1, keepdim=True)
+            ff = ff.div(fnorm.expand_as(ff))
+
+        features = torch.cat((features, ff), 0)
+
+    return features
 
 
 # -------------------------------------------------------------------
