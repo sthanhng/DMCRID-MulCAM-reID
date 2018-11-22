@@ -150,6 +150,28 @@ def fliplr(img):
     return flipped_img
 
 
+def get_id(img_path):
+    """
+    Get id of the input images
+    :param img_path: Path to the images
+    :return: camera_id, labels
+    """
+
+    camera_id = []
+    labels = []
+    for path, v in img_path:
+        filename = os.path.basename(path)
+        label = filename[0:4]
+        camera = filename.split('c')[1]
+        if label[0:2] == '-1':
+            labels.append(-1)
+        else:
+            labels.append(int(label))
+        camera_id.append(int(camera[0]))
+
+    return camera_id, labels
+
+
 # -------------------------------------------------------------------
 #
 # Test split_subfolder
