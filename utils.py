@@ -117,6 +117,39 @@ def save_model(network, epoch_label, model_path):
     torch.save(network.cpu().state_dict(), save_path)
 
 
+# --------------------------------------------------------------------
+#
+# Load the trained model
+#
+# --------------------------------------------------------------------
+def load_model(network, model_path, epoch):
+    """
+    Load the trained model which specific epoch
+    :param network: The model trained in training
+    :param model_path: Path to the model
+    :param epoch: which epoch
+    :return: The trained model
+    """
+
+    saved_path = os.path.join(model_path, 'net_{}.pth'.format(epoch))
+    network.load_state_dict(torch.load(saved_path))
+
+    return network
+
+
+def fliplr(img):
+    """
+    Flip horizontal
+    :param img: The input image
+    :return: The flipped image
+    """
+
+    inv_idx = torch.arange(img.size(3) - 1, -1, -1).long()  # N x C x H x W
+    flipped_img = img.index_select(3, inv_idx)
+
+    return flipped_img
+
+
 # -------------------------------------------------------------------
 #
 # Test split_subfolder
