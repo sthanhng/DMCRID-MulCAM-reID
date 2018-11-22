@@ -142,7 +142,7 @@ if args.multi:
         'mquery_label': mquery_label,
         'mquery_cam': mquery_cam
     }
-    fname = args.model_name + args.epoch + 'multi_query.mat'
+    fname = args.model_name + '_' + args.epoch + '_multi_query.mat'
     scipy.io.savemat(os.path.join('./results', fname), result)
 else:
     result = {
@@ -153,5 +153,5 @@ else:
         'query_label': query_label,
         'query_cam': query_cam
     }
-    fname = args.model_name + args.epoch + 'single_query.mat'
+    fname = args.model_name + '_' + args.epoch + '_single_query.mat'
     scipy.io.savemat(os.path.join('./results', fname), result)

@@ -114,7 +114,7 @@ def draw_curve(current_epoch, y_loss, y_error, args):
 #
 # --------------------------------------------------------------------
 def save_model(network, epoch_label, model_path):
-    save_filename = 'net_{}.pth'.format(epoch_label)
+    save_filename = 'model_{}.pth'.format(epoch_label)
     save_path = os.path.join(model_path, save_filename)
     torch.save(network.cpu().state_dict(), save_path)
     if torch.cuda.is_available():
@@ -135,7 +135,7 @@ def load_model(network, model_path, epoch):
     :return: The trained model
     """
 
-    saved_path = os.path.join(model_path, 'net_{}.pth'.format(epoch))
+    saved_path = os.path.join(model_path, 'model_{}.pth'.format(epoch))
     network.load_state_dict(torch.load(saved_path))
 
     return network
