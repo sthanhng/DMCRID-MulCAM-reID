@@ -13,6 +13,7 @@ import os
 import matplotlib
 import matplotlib.pyplot as plt
 import torch
+import numpy as np
 
 from shutil import copyfile
 from torch.autograd import Variable
