@@ -25,6 +25,8 @@ from utils import load_model, get_id, extract_feature
 
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--model-path', default='models', type=str,
+                    help='path to the model')
 parser.add_argument('--epoch', default='last', type=str,
                     help='')
 parser.add_argument('--data-dir', default='./datasets/Market-1501/market-reid',
