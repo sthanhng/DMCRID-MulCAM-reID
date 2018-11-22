@@ -56,7 +56,6 @@ parser.add_argument('--PCB', action='store_true', default=False,
                     help='use PCB-based model')
 args = parser.parse_args()
 
-
 ######################################################################
 
 model_path_full = os.path.join(args.model_path, args.model_name)
@@ -66,7 +65,6 @@ if not os.path.exists(model_path_full):
 # save arguments
 with open('{}/args.json'.format(model_path_full), 'w') as fp:
     json.dump(vars(args), fp, indent=4)
-
 
 # -------------------------------------------------------------------
 #
@@ -148,7 +146,6 @@ class_names = image_dsets['train'].classes
 use_gpu = torch.cuda.is_available()
 
 inputs, classes = next(iter(dset_loaders['train']))
-
 
 ######################################################################
 
@@ -255,7 +252,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
             epoch_loss = running_loss / dset_sizes[phase]
             epoch_acc = running_corrects / dset_sizes[phase]
 
-            print('[{}] Phase | Loss: {:.4f}\tAccuracy: {:.4f}'.format(
+            print('[{} Phase]\tLoss: {:.4f}\tAccuracy: {:.4f}'.format(
                 phase, epoch_loss, epoch_acc))
 
             y_loss[phase].append(epoch_loss)
@@ -343,9 +340,6 @@ if __name__ == '__main__':
     exp_lr_scheduler = lr_scheduler.StepLR(optimizer,
                                            step_size=args.lr_decay_epoch,
                                            gamma=0.1)
-
-
-    ######################################################################
 
     # --------------------------------------------------------------------
     #
