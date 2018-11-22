@@ -47,6 +47,9 @@ parser.add_argument('--batch-size', default=32, type=int, help='batch-size')
 parser.add_argument('--num-epochs', default=30, type=int,
                     help='number of epochs in training')
 parser.add_argument('--num-workers', default=8, type=int, help='num-workers')
+parser.add_argument('--lr', default=0.001, type=float, help='the learning rate')
+parser.add_argument('--weight-decay', default=5e-4, type=float,
+                    help='the weight decay of optimizer')
 parser.add_argument('--lr-decay-epoch', default=40, type=int,
                     help='decay lr after lr-decay-epoch')
 parser.add_argument('--PCB', action='store_true', default=False,
@@ -262,7 +265,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
             # save the model
             if phase == 'val':
                 last_model = model.state_dict()
-                if epoch + 1 % 10 == 0:
+                if (epoch + 1) % 10 == 0:
                     save_model(model, epoch, model_path_full)
                 draw_curve(epoch, y_loss, y_err, args.model_name)
 
@@ -273,9 +276,6 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
     # load last model weights
     model.load_state_dict(last_model)
     save_model(model, 'last', model_path_full)
-
-    # debug the model structure
-    print(model)
 
     return model
 
@@ -298,8 +298,6 @@ if __name__ == '__main__':
     else:
         model = ResNet50(len(class_names))
 
-    print(model)
-
     if use_gpu:
         model = model.cuda()
 
@@ -312,9 +310,9 @@ if __name__ == '__main__':
                              model.parameters())
         optimizer = optim.SGD([
             {'params': base_params, 'lr': 0.01},
-            {'params': model.model.fc.parameters(), 'lr': 0.1},
-            {'params': model.classifier.parameters(), 'lr': 0.1}
-        ], weight_decay=5e-4, momentum=0.9, nesterov=True)
+            {'params': model.model.fc.parameters(), 'lr': args.lr},
+            {'params': model.classifier.parameters(), 'lr': args.lr}
+        ], weight_decay=args.weight_decay, momentum=0.9, nesterov=True)
     else:
         ignored_params = list(map(id, model.model.fc.parameters()))
         ignored_params += (list(map(id, model.classifier0.parameters()))
@@ -328,14 +326,14 @@ if __name__ == '__main__':
                              model.parameters())
         optimizer = optim.SGD([
             {'params': base_params, 'lr': 0.01},
-            {'params': model.model.fc.parameters(), 'lr': 0.1},
-            {'params': model.classifier0.parameters(), 'lr': 0.1},
-            {'params': model.classifier1.parameters(), 'lr': 0.1},
-            {'params': model.classifier2.parameters(), 'lr': 0.1},
-            {'params': model.classifier3.parameters(), 'lr': 0.1},
-            {'params': model.classifier4.parameters(), 'lr': 0.1},
-            {'params': model.classifier5.parameters(), 'lr': 0.1},
-        ], weight_decay=5e-4, momentum=0.9, nesterov=True)
+            {'params': model.model.fc.parameters(), 'lr': args.lr},
+            {'params': model.classifier0.parameters(), 'lr': args.lr},
+            {'params': model.classifier1.parameters(), 'lr': args.lr},
+            {'params': model.classifier2.parameters(), 'lr': args.lr},
+            {'params': model.classifier3.parameters(), 'lr': args.lr},
+            {'params': model.classifier4.parameters(), 'lr': args.lr},
+            {'params': model.classifier5.parameters(), 'lr': args.lr},
+        ], weight_decay=args.weight_decay, momentum=0.9, nesterov=True)
 
     # --------------------------------------------------------------------
     #
@@ -354,6 +352,5 @@ if __name__ == '__main__':
     # Train and evaluate
     #
     # --------------------------------------------------------------------
-
     model = train_model(model, criterion, optimizer, exp_lr_scheduler,
                         num_epochs=args.num_epochs)
