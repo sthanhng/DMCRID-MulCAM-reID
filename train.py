@@ -267,7 +267,7 @@ def train_model(model, criterion, optimizer, scheduler, num_epochs=25):
                 last_model = model.state_dict()
                 if (epoch + 1) % 10 == 0:
                     save_model(model, epoch, model_path_full)
-                draw_curve(epoch, y_loss, y_err, args.model_name)
+                draw_curve(epoch, y_loss, y_err, args)
 
     time_elapsed = time.time() - start_time
     print('[i] training complete in {:.0f}m {:.0f}s'.format(time_elapsed // 60,

@@ -85,7 +85,7 @@ ax0 = fig.add_subplot(121, title='loss')
 ax1 = fig.add_subplot(122, title='top1-err')
 
 
-def draw_curve(current_epoch, y_loss, y_error, model_name):
+def draw_curve(current_epoch, y_loss, y_error, args):
     """
     Draw the curved line of the training phase
 
@@ -105,7 +105,7 @@ def draw_curve(current_epoch, y_loss, y_error, model_name):
     if current_epoch == 0:
         ax0.legend()
         ax1.legend()
-    fig.savefig(os.path.join('./model', model_name, 'curved_line.jpg'))
+    fig.savefig(os.path.join(args.mode_path, args.model_name, 'curved_line.jpg'))
 
 
 # --------------------------------------------------------------------
