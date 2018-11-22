@@ -117,6 +117,8 @@ def save_model(network, epoch_label, model_path):
     save_filename = 'net_{}.pth'.format(epoch_label)
     save_path = os.path.join(model_path, save_filename)
     torch.save(network.cpu().state_dict(), save_path)
+    if torch.cuda.is_available():
+        network.cuda()
 
 
 # --------------------------------------------------------------------
