@@ -19,10 +19,29 @@ An implementation of the person re-identification
 3. Pillow
 4. Scipy
 
-**Installation**
+### Installation dependencies
 
-Install the required packages by running the following command:
+Development for this project will be isolated in Python virtual environment. This allows us to experiment with different versions of dependencies.
 
+There are many ways to install `virtual environment (virtualenv)`, see the [Python Virtual Environments: A Primer](https://realpython.com/python-virtual-environments-a-primer/) guide for different platforms, but here are a couple:
+
+- For Ubuntu
+```bash
+$ pip install virtualenv
+```
+
+- For Mac
+```bash
+$ pip install --upgrade virtualenv
+```
+
+Create a Python 3.6 virtual environment for this project and activate the virtualenv:
+```bash
+$ virtualenv -p python3.6 mulcam-reid
+$ source ./mulcam-reid/bin/activate
+```
+
+Next, install the dependencies for the this project:
 ```bash
 $ pip install -r requirements.txt
 ```
@@ -74,6 +93,7 @@ $ python prepare_data.py
 - [x] Create the model
 - [x] Train the defined model
 - [x] Running inference
+- [x] Running a demo
 
 ## References
 
@@ -81,3 +101,4 @@ $ python prepare_data.py
 - [A Practical Guide to Person Re-Identification Using AlignedReID](https://medium.com/@niruhan/a-practical-guide-to-person-re-identification-using-alignedreid-7683222da644)
 - [Beyond Part Models: Person Retrieval with Refined Part Pooling](https://arxiv.org/pdf/1711.09349.pdf)
 - [Person Re-Identification by Deep Learning Multi-Scale Representations](http://www.eecs.qmul.ac.uk/~xiatian/papers/ChenEtAl_ICCV2017WS_CHI.pdf)
+- [Python Virtual Environments: A Primer](https://realpython.com/python-virtual-environments-a-primer/)
