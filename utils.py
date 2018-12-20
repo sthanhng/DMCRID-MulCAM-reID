@@ -230,6 +230,14 @@ def extract_feature(model, data_loaders, args):
     return features
 
 
+def render_result(path, title=None):
+    img = plt.imread(path)
+    plt.imshow(img)
+    if title is not None:
+        plt.title(title)
+    plt.pause(0.001)    # pause a bit so that plots are updated
+
+
 # -------------------------------------------------------------------
 #
 # Test split_subfolder
