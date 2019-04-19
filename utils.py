@@ -230,6 +230,46 @@ def extract_feature(model, data_loaders, args):
     return features
 
 
+def render_result(path, title=None):
+    img = plt.imread(path)
+    plt.imshow(img)
+    if title is not None:
+        plt.title(title)
+    plt.pause(0.001)    # pause a bit so that plots are updated
+
+
+# --------------------------------------------------------------------
+#
+# Sort the images
+#
+# --------------------------------------------------------------------
+def sort_image(qf, ql, qc, gf, gl, gc):
+    query = qf.view(-1, 1)
+    score = torch.mm(gf, query)
+    score = score.squeeze(1).cpu()
+    score = score.numpy()
+
+    # predict index
+    index = np.argsort(score)
+    index = index[::-1]
+
+    # index = index[0:2000]
+    # good index
+    query_index = np.argwhere(gl == ql)
+    # same camera
+    camera_index = np.argwhere(gc == qc)
+
+    good_index = np.setdiff1d(query_index, camera_index, assume_unique=True)
+    junk_index1 = np.argwhere(gl == -1)
+    junk_index2 = np.intersect1d(query_index, camera_index)
+    junk_index = np.append(junk_index2, junk_index1)
+
+    mask = np.in1d(index, junk_index, invert=True)
+    index = index[mask]
+
+    return index
+
+
 # -------------------------------------------------------------------
 #
 # Test split_subfolder
